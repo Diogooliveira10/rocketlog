@@ -42,7 +42,11 @@ class DeliveryLogsController {
         const { delivery_id } = paramsSchema.parse(request.params)
 
         const delivery = await prisma.delivery.findUnique({
-            where: { id: delivery_id }
+            where: { id: delivery_id },
+            include: {
+                logs: true,
+                user: true
+            }
         })
 
         if(request.user?.role === "customer" && request.user.id !== delivery?.userId) {
